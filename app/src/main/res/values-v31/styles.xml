@@ -1,0 +1,11 @@
+<resources>
+    <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">#111111</item>
+        <item name="android:colorAccent">#2B6CB0</item>
+        <item name="android:windowSplashScreenBackground">#1F2937</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_quickedl_logo</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">#1F2937</item>
+    </style>
+</resources>

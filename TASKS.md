@@ -1,0 +1,108 @@
+# QuickEDL Task List
+
+## Done
+
+- Created Android project scaffold.
+- Chose Media3 / ExoPlayer for playback.
+- Chose Android Storage Access Framework for folder access.
+- Documented the app design and EDL sidecar format.
+- Implement the first usable Android activity with folder browsing, playback, scrubbing, and EDL editing.
+- Added SDK setup notes.
+- Generated Gradle wrapper files for Gradle 8.10.2.
+- Documented Debian ARM64 tooling constraints.
+- Verified `./gradlew -v` works with repo-local Gradle cache.
+- Ran `./gradlew assembleDebug`; current blocker is missing `javac` from the installed Java runtime.
+- Installed full JDK; `javac 21.0.11` is now available.
+- Installed Android build tools and Android 35 platform jar.
+- Added `local.properties` for `/usr/lib/android-sdk`.
+- Added project-local Android SDK overlay for AGP's required `build-tools;34.0.0`.
+- Recovered and documented post-crash state in `SESSION_HANDOFF.md`.
+- Re-ran `assembleDebug`; current blocker is AGP's bundled x86_64 `aapt2` binary on Debian ARM64.
+- Added `android.aapt2FromMavenOverride=/usr/bin/aapt2` for Debian ARM64.
+- Confirmed Debian `aapt2` cannot link against API 35 `android.jar`.
+- Downloaded and unpacked API 34 platform into the project-local SDK.
+- Switched compile/target SDK to 34 for the local ARM64 build.
+- Built debug APK successfully at `app/build/outputs/apk/debug/app-debug.apk`.
+- Re-verified debug build success on 2026-06-07.
+- Checked `adb devices -l`; ADB daemon starts, but no Android device is currently connected.
+- Re-verified debug build success on 2026-06-08.
+- Connected and authorized a Pixel 8 over ADB.
+- Installed the debug APK on the Pixel 8.
+- Launched QuickEDL on device and confirmed `MainActivity` stayed resumed in the foreground.
+- Picked `/sdcard/DCIM/Camera`, listed three videos, loaded playback, and created one range.
+- Verified `/sdcard/DCIM/Camera/VID_20260604_071146.edl` was written with a valid `QuickEDL v1` range.
+- Restarted the app and confirmed the folder grant, existing `.edl`, and total selected `In` time restored.
+- Fixed portrait phone layout by stacking the list above the player/controls.
+- Fixed clipped action controls by rendering EDL buttons in two weighted rows.
+- Rebuilt, reinstalled, and visually checked the updated layout in portrait and landscape on the Pixel 8.
+- Added file-list hide/show toggle.
+- Reworked landscape layout so controls live on the right quarter of the screen.
+- Reworked portrait layout so controls live on the bottom quarter of the screen.
+- Renamed edit controls to Resolve-style `Mark In`, `Mark Out`, and `Clear In/Out`.
+- Clarified edit boundary navigation with `Prev Edit Point` and `Next Edit Point`.
+- Added `Next Unmarked` navigation.
+- Added per-clip lock/unlock icon buttons and persisted lock state.
+- Added EDL range timeline strip with selected-range and playhead coloring.
+- Moved EDL range highlighting to the primary scrubber under video playback and removed the secondary highlight strip.
+- Made the highlighted primary scrubber tap/drag seekable.
+- Disabled the dimming Media3 overlay controller.
+- Added custom non-overlay transport controls below the video.
+- Made `Mark In` / `Mark Out` order-independent.
+- Added pending In/Out preview highlighting on the primary timeline.
+- Changed slow scrub to relative fine scrubbing with one-frame `-` / `+` step buttons.
+- Enlarged slow-scrub `-` and `+` frame-step touch targets.
+- Added `EDL_FORMAT.md` documenting the QuickEDL sidecar format and recommended export strategy.
+- Added Open Video Editor Android as the first native Android compatibility target in `EDL_FORMAT.md`.
+- Added `latest_build/` for a root-level copy of the latest debug APK.
+- Fixed photo-heavy camera folder loading by querying SAF children and creating rows only for videos and matching `.edl` files.
+- Moved initial folder scan to a background thread.
+- Moved selected clip EDL reads and sidecar writes off the UI thread.
+- Reduced playback UI refresh cadence to lower ANR risk.
+- Added persistent active-video highlighting in the file list.
+- Moved `-1F` / `+1F` frame-step controls into the transport row.
+- Renamed transport jump labels to `-5s` and `+5s`.
+- Added vector launcher/startup icon resources.
+- Added generated cartoon splash concept asset.
+- Rebuilt successfully after the interrupted compile on 2026-06-09.
+- Refreshed `latest_build/app-debug.apk` and `latest_build/quickedl-debug.apk` from the fresh debug APK.
+- Reinstalled the fresh debug APK on the connected Pixel 8.
+- Relaunched QuickEDL and confirmed `MainActivity` is resumed, visible, focused, and running.
+- Verified the persisted Camera folder grant restores and lists 5 videos without reopening the picker.
+- Verified existing `.edl` sidecars remain intact on the phone.
+- Verified lazy sidecar loading and persistent current-video highlighting after selecting `VID_20260604_071146.mp4`.
+- Verified the file-list hide/show toggle expands the review area and keeps controls visible.
+- Reduced active playback/scrubbing UI refresh from 500ms to 100ms while keeping 500ms idle refresh.
+- Added immediate transport/timeline refresh after fast scrub, slow scrub, and primary timeline drag seeks.
+- Rebuilt, refreshed `latest_build/`, reinstalled on the Pixel 8, and confirmed the app resumes.
+- Created separate `QuickMashup/` command-line tool.
+- Added QuickMashup directory/file input scanning, recursive and `--no-recursive` modes, QuickEDL sidecar parsing, optional date/date-range filtering, camera/mode heuristics, ffmpeg excerpt rendering, and concat output.
+- Added QuickMashup README and unit tests.
+- Verified QuickMashup with unit tests and synthetic ffmpeg smoke renders, including a mixed audio/no-audio concat.
+
+## In progress
+
+- Continue physical-device validation beyond the first smoke test.
+- Validate QuickMashup against real copied camera folders.
+
+## Next
+
+- Hands-on validate scrub feel after the adaptive 100ms active refresh change.
+- Verify lock/unlock prevents editing but allows playback.
+- Verify `Next Unmarked` skips locked and already-marked clips.
+- Verify `Clear In/Out` clears only the pending mark.
+- Verify Out-first then In creates and highlights the correct normalized range.
+- Verify photo-heavy camera directory opens quickly and lists videos only.
+- Verify playback/editing no longer triggers "QuickEDL isn't responding".
+- Verify primary timeline coloring while scrubbing through selected and unselected ranges.
+- Verify slow scrub relative movement and transport-row one-frame `-1F` / `+1F` stepping.
+- Verify launcher icon and startup branding on device.
+- Polish portrait top-bar spacing between `Folder` and the file-list toggle.
+- Test multiple ranges per video.
+- Test removing the EDL range containing the current playhead.
+- Test previous/next EDL boundary navigation.
+- Add script/export tooling for OTIO, CMX 3600, and MLT XML.
+- Add `android-json` export/import-share design for Open Video Editor compatibility.
+- Validate playback and scrubbing behavior with longer real footage and varied codecs.
+- Add QuickMashup explicit camera clock offset/sync controls.
+- Add real camera sample detection cases for Pixel 8, S20+ 5G, iPhone, Vuze+, VuzeXR, Insta360, and Qoocam Ego.
+- Add polish after real usage: keyboard/remote shortcuts, thumbnail previews, sort modes, and batch EDL summaries.
